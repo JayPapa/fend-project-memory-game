@@ -2,6 +2,7 @@
  * Create a list that holds all of your cards
  */
 
+const restart = document.querySelector('.restart');
 
 /*
  * Display the cards on the page
@@ -24,6 +25,21 @@ function shuffle(array) {
 
     return array;
 }
+
+let listOfCards = document.querySelectorAll('.card');
+listOfCards = shuffle(listOfCards);
+console.log(listOfCards);
+
+document.addEventListener("click", function(clicked) {
+
+
+  const deck = document.querySelector('.deck');
+
+
+  for(const card of listOfCards){
+    deck.appendChild(card);
+  }
+}); //Adding an event listener to shuffle cards
 
 
 /*
