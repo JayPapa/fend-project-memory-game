@@ -47,9 +47,14 @@ function shuffle(array) {
 //Using shuffle function to Create newDeck
 let cards = shuffle(beginCards);
 //Using for loop to create the new cards
-for(let i = 0; i < cards.length; i++) {
-  let h = '<li class="card"><i class="' + cards[i] + '"></i></li>';
-  deck.appendChild(h);
+for(let card of cards) {
+  let li = document.createElement('li');
+  li.className = "card";
+  let i = document.createElement('i');
+  i.className = card;
+  let fullCard = li + i;
+  console.log(fullCard);
+  deck.append(fullCard);
 };
 
 /*
