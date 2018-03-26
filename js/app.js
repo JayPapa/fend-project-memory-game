@@ -47,14 +47,15 @@ function shuffle(array) {
 //Using shuffle function to Create newDeck
 let cards = shuffle(beginCards);
 //Using for loop to create the new cards
+
 for(let card of cards) {
+  deck.removeChild(deck.firstElementChild);
   let li = document.createElement('li');
   li.className = "card";
   let i = document.createElement('i');
   i.className = card;
-  let fullCard = li + i;
-  console.log(fullCard);
-  deck.append(fullCard);
+  li.appendChild(i);
+  deck.append(li);
 };
 
 /*
