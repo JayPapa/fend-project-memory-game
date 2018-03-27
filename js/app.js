@@ -18,15 +18,16 @@ let beginCards = [
   "fa fa-bicycle",
   "fa fa-paper-plane-o",
   "fa fa-cube"];
-/*
+/**
 * Creating Variables
 */
 const restart = document.querySelector('.restart');
 const deck = document.querySelector('.deck');
+const spanMoves = document.querySelector('.moves');
 let checkClassCard = [];
 let cardList = [];
-
-// let carde = document.querySelector('.card');
+let matches = 0;
+let moves = 0;
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -48,59 +49,79 @@ function shuffle(array) {
 
     return array;
 }
-
+//Match function
+function matched() {
+  cardList[0].classList.toggle('open');
+  cardList[0].classList.toggle('match');
+  cardList[1].classList.toggle('open');
+  cardList[1].classList.toggle('match');
+  matches ++;
+  checkClassCard = [];
+  cardList = [];
+}
+//Unmatched function
+function unmatch() {
+  cardList[0].classList.toggle('open');
+  cardList[0].classList.toggle('show');
+  cardList[1].classList.toggle('open');
+  cardList[1].classList.toggle('show');
+  checkClassCard = [];
+  cardList = [];
+}
 //TODO:*list* "open" cards
-function openCards() {
-  let openedCard = this.className;
-  openedCard.push(checkClassCard);
-  console.log(checkClassCard);
+function openCards(a) {
+  moves ++;
+  spanMoves.textContent = moves;
+  cardList.push(a);
+  let openedCard = a.firstElementChild.className;
+  checkClassCard.push(openedCard);
   if(checkClassCard.length > 1) {
     if(checkClassCard[0] === openedCard){
-        checkClassCard[0].classList.add('match');
-        checkClassCard[1].classList.add('match');
-        console.log(checkClassCard[1]);
-    }else{checkClassCard = [];}
+        matched();
+    }else{
+    //TODO:negative/red effect adding a class and then removing it on dalay
+        setTimeout(function() {
+          unmatch();
+      }, 600);
+    }
   }
-
+  if(matches === 8){
+    swal({
+      title: "You're the Best, you're AWESOME!",
+      text: "You clicked the button!",
+      icon: "success",
+      button: "Aww yiss!",
+    });
+  }
 }
 //function to flip the cards
 function flip() {
   let a = this;
   a.classList.toggle('open');
   a.classList.toggle('show');
-  cardList.push(a);
-  let openedCard = a.firstElementChild.className;
-  checkClassCard.push(openedCard);
-  if(checkClassCard.length > 1) {
-    if(checkClassCard[0] === openedCard){
-        cardList[0].classList.toggle('open');
-        cardList[0].classList.toggle('match');
-        cardList[1].classList.toggle('open');
-        cardList[1].classList.toggle('match');
-    }else{
-    //TODO:negative/red effect
-        // cardList[0].classList.toggle('open');
-        // cardList[0].classList.toggle('show');
-        // cardList[1].classList.toggle('open');
-        // // cardList[1].classList.toggle('show');
-        checkClassCard = [];
-        cardList = [];
-    }
-  }
+  openCards(a);
 }
-//Using shuffle function to Create newDeck
-let cards = shuffle(beginCards);
-//Using for loop to create the new li + i cards and append to desk
-for(let card of cards) {
-  deck.removeChild(deck.firstElementChild);
-  let li = document.createElement('li');
-  li.className = "card";
-  let i = document.createElement('i');
-  i.className = card;
-  li.appendChild(i);
-  deck.appendChild(li);
-  li.addEventListener('click', flip);
-};
+function startGame() {
+  //Using shuffle function to Create newDeck
+  let cards = shuffle(beginCards);
+  //Using for loop to create the new li + i cards and append to desk
+  for(let card of cards) {
+    deck.removeChild(deck.firstElementChild);
+    let li = document.createElement('li');
+    li.className = "card";
+    let i = document.createElement('i');
+    i.className = card;
+    li.appendChild(i);
+    deck.appendChild(li);
+    li.addEventListener('click', flip);
+  };
+  matches = 0;
+  moves = 0;
+  spanMoves.textContent = moves;
+}
+startGame();
+//Add the restart button to reset the game!
+restart.addEventListener('click', startGame);
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
