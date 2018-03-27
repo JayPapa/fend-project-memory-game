@@ -22,7 +22,10 @@ let beginCards = [
 * Creating Variables
 */
 const restart = document.querySelector('.restart');
-let deck = document.querySelector('.deck');
+const deck = document.querySelector('.deck');
+let checkClassCard = [];
+let cardList = [];
+
 // let carde = document.querySelector('.card');
 /*
  * Display the cards on the page
@@ -46,17 +49,44 @@ function shuffle(array) {
     return array;
 }
 
+//TODO:*list* "open" cards
+function openCards() {
+  let openedCard = this.className;
+  openedCard.push(checkClassCard);
+  console.log(checkClassCard);
+  if(checkClassCard.length > 1) {
+    if(checkClassCard[0] === openedCard){
+        checkClassCard[0].classList.add('match');
+        checkClassCard[1].classList.add('match');
+        console.log(checkClassCard[1]);
+    }else{checkClassCard = [];}
+  }
+
+}
 //function to flip the cards
 function flip() {
   let a = this;
-  console.log(a);
-  console.log('azz');
   a.classList.toggle('open');
   a.classList.toggle('show');
-}
-//TODO:*list* "open" cards
-function openCards() {
-  console.log('dont');
+  cardList.push(a);
+  let openedCard = a.firstElementChild.className;
+  checkClassCard.push(openedCard);
+  if(checkClassCard.length > 1) {
+    if(checkClassCard[0] === openedCard){
+        cardList[0].classList.toggle('open');
+        cardList[0].classList.toggle('match');
+        cardList[1].classList.toggle('open');
+        cardList[1].classList.toggle('match');
+    }else{
+    //TODO:negative/red effect
+        // cardList[0].classList.toggle('open');
+        // cardList[0].classList.toggle('show');
+        // cardList[1].classList.toggle('open');
+        // // cardList[1].classList.toggle('show');
+        checkClassCard = [];
+        cardList = [];
+    }
+  }
 }
 //Using shuffle function to Create newDeck
 let cards = shuffle(beginCards);
