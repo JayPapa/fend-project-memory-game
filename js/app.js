@@ -23,6 +23,7 @@ let beginCards = [
 */
 const restart = document.querySelector('.restart');
 let deck = document.querySelector('.deck');
+const carde = document.querySelector('.card');
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -44,6 +45,18 @@ function shuffle(array) {
 
     return array;
 }
+
+//function to flip the cards
+function flip() {
+  let a = this;
+  console.log(a);
+  a.classList.toggle('open');
+  a.classList.toggle('show');
+}
+//TODO:*list* "open" cards
+function openCards() {
+  console.log('dont');
+}
 //Using shuffle function to Create newDeck
 let cards = shuffle(beginCards);
 //Using for loop to create the new cards
@@ -55,8 +68,11 @@ for(let card of cards) {
   let i = document.createElement('i');
   i.className = card;
   li.appendChild(i);
-  deck.append(li);
+  deck.appendChild(li);
 };
+
+//Event listener to flip on click
+deck.addEventListener('click', flip);
 
 /*
  * set up the event listener for a card. If a card is clicked:
