@@ -32,12 +32,6 @@ let cardList = [];
 let matches = 0;
 let moves = 0;
 let starRating = 0;
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -91,8 +85,7 @@ function matched() {
   cardList[0].classList.toggle('rubberBand');
   cardList[1].classList.toggle('animated');
   cardList[1].classList.toggle('rubberBand');
-  //add the match to the variable and empties the lists
-  matches ++;
+  //empties the lists
   checkClassCard = [];
   cardList = [];
 }
@@ -127,9 +120,13 @@ function unMatchedEffect() {
   cardList[1].classList.toggle('animated');
   cardList[1].classList.toggle('tada');
 }
-//Add modal when the player wins
+//Timer function
+function timer() {
+}
+//Add modal for the end Game Congrats
 function Won() {
-  if(matches === 8){
+  console.log(matches);
+  if(matches == 8){
     swal({
       title: "You're the Best, you're AWESOME!",
       text: "You clicked the button!",
@@ -139,26 +136,26 @@ function Won() {
     startGame();
   }
 }
-//TODO:*list* "open" cards
+//*list* "open" cards
 function openCards(a) {
-  moveStars();
   cardList.push(a);
   let openedCard = a.firstElementChild.className;
   checkClassCard.push(openedCard);
   if(checkClassCard.length > 1) {
     if(checkClassCard[0] === openedCard){
       matchedEffect();
+      matches ++;
       setTimeout(function() {
         matched();
       }, 500);
     }else{
       unMatchedEffect();
-    //TODO:negative/red effect adding a class and then removing it on dalay
       setTimeout(function() {
           unmatch();
       }, 500);
     }
   }
+  moveStars();
   Won();
 }
 function startGame() {
@@ -175,15 +172,15 @@ function startGame() {
     deck.appendChild(li);
     li.addEventListener('click', flip);
   };
-  matches = 0;
   moves = 0;
   spanMoves.textContent = moves;
-  firstStar.classList.remove('fa-star-o')
+  firstStar.classList.remove('fa-star-o');
   firstStar.classList.add('fa-star');
-  secondStar.classList.remove('fa-star-o')
+  secondStar.classList.remove('fa-star-o');
   secondStar.classList.add('fa-star');
-  thirdStar.classList.remove('fa-star-o')
+  thirdStar.classList.remove('fa-star-o');
   thirdStar.classList.add('fa-star');
+  matches = 0;
 }
 startGame();
 //Add the restart button to reset the game!
