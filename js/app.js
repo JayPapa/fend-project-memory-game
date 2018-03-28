@@ -36,6 +36,8 @@ let moves = 0;
 let starRating = 0;
 let seconds = 0;
 let minutes = 0;
+let firstClick = true;
+let time;
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -55,8 +57,11 @@ function flip() {
   let a = this;
   a.classList.toggle('open');
   a.classList.toggle('show');
+  if(firstClick) {
+    timer();
+    firstClick = false;
+  }
   openCards(a);
-  timer();
 }
 //function to set moves and stars
 function moveStars() {
@@ -64,15 +69,15 @@ function moveStars() {
   moves ++;
   spanMoves.textContent = moves;
   //check if the move is = to n, then changes the star to white and sets the n to a variable
-  if(moves === 21){
+  if(moves === 25){
     thirdStar.classList.toggle('fa-star');
     thirdStar.classList.toggle('fa-star-o');
     starRating = 2;
-  }else if (moves === 26) {
+  }else if (moves === 30) {
     secondStar.classList.toggle('fa-star');
     secondStar.classList.toggle('fa-star-o');
     starRating = 1;
-  }else if (moves === 32){
+  }else if (moves === 36){
     firstStar.classList.toggle('fa-star');
     firstStar.classList.toggle('fa-star-o');
     starRating = 0;
@@ -126,35 +131,38 @@ function unMatchedEffect() {
 }
 //Timer function
 function timer() {
-  setInterval(function() {
-    if(seconds < 60){
-      sec.textContent = seconds;
-      seconds ++;
-    }else if(seconds === 60) {
-      seconds = 0;
-      minutes ++;
-      seconds ++;
-      sec.textContent = seconds;
-      min.textContent = minutes;
-    }
-  },1000);
+  time = setInterval(function() {
+      if(seconds < 60){
+        sec.textContent = seconds;
+        seconds ++;
+      }else if(seconds === 60) {
+        seconds = 0;
+        minutes ++;
+        seconds ++;
+        sec.textContent = seconds;
+        min.textContent = minutes;
+      }
+    },1000);
 }
 //Add modal for the end Game Congrats
 function Won() {
   if(matches == 8){
     swal({
-      title: "You're the Best, you're AWESOME!",
-      text: "You clicked the button!",
+      title: "You WON, you're the BEST!",
+      text: moves + " moves, " + starRating + " star/s! Your time: " + minutes + "m " + seconds + "s",
       icon: "success",
-      button: "Aww yiss!",
+      button: "Like it? Play Again!",
     });
     startGame();
   }
 }
 //*list* "open" cards
 function openCards(a) {
+  //add card to the list
   cardList.push(a);
+  //read class
   let openedCard = a.firstElementChild.className;
+  //check classes and match or unmatch
   checkClassCard.push(openedCard);
   if(checkClassCard.length > 1) {
     if(checkClassCard[0] === openedCard){
@@ -196,17 +204,13 @@ function startGame() {
   thirdStar.classList.remove('fa-star-o');
   thirdStar.classList.add('fa-star');
   matches = 0;
+  seconds = 0;
+  minutes = 0;
+  firstClick = true;
+  clearInterval(time);
+  sec.textContent = seconds;
+  min.textContent = minutes;
 }
 startGame();
 //Add the restart button to reset the game!
 restart.addEventListener('click', startGame);
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
