@@ -27,12 +27,15 @@ const spanMoves = document.querySelector('.moves');
 const firstStar = document.querySelector('#first-star');
 const secondStar = document.querySelector('#second-star');
 const thirdStar = document.querySelector('#third-star');
+const min = document.querySelector('.min');
+const sec = document.querySelector('.sec');
 let checkClassCard = [];
 let cardList = [];
 let matches = 0;
 let moves = 0;
 let starRating = 0;
-
+let seconds = 0;
+let minutes = 0;
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -53,6 +56,7 @@ function flip() {
   a.classList.toggle('open');
   a.classList.toggle('show');
   openCards(a);
+  timer();
 }
 //function to set moves and stars
 function moveStars() {
@@ -122,10 +126,21 @@ function unMatchedEffect() {
 }
 //Timer function
 function timer() {
+  setInterval(function() {
+    if(seconds < 60){
+      sec.textContent = seconds;
+      seconds ++;
+    }else if(seconds === 60) {
+      seconds = 0;
+      minutes ++;
+      seconds ++;
+      sec.textContent = seconds;
+      min.textContent = minutes;
+    }
+  },1000);
 }
 //Add modal for the end Game Congrats
 function Won() {
-  console.log(matches);
   if(matches == 8){
     swal({
       title: "You're the Best, you're AWESOME!",
