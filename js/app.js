@@ -24,10 +24,14 @@ let beginCards = [
 const restart = document.querySelector('.restart');
 const deck = document.querySelector('.deck');
 const spanMoves = document.querySelector('.moves');
+const firstStar = document.querySelector('#first-star');
+const secondStar = document.querySelector('#second-star');
+const thirdStar = document.querySelector('#third-star');
 let checkClassCard = [];
 let cardList = [];
 let matches = 0;
 let moves = 0;
+let starRating = 0;
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -49,15 +53,55 @@ function shuffle(array) {
 
     return array;
 }
+//function to flip the cards
+function flip() {
+  let a = this;
+  a.classList.toggle('open');
+  a.classList.toggle('show');
+  openCards(a);
+}
+//function to set moves and stars
+function moveStars() {
+//adding and writing the move
+  moves ++;
+  spanMoves.textContent = moves;
+  //check if the move is = to n, then changes the star to white and sets the n to a variable
+  if(moves === 21){
+    thirdStar.classList.toggle('fa-star');
+    thirdStar.classList.toggle('fa-star-o');
+    starRating = 2;
+  }else if (moves === 26) {
+    secondStar.classList.toggle('fa-star');
+    secondStar.classList.toggle('fa-star-o');
+    starRating = 1;
+  }else if (moves === 32){
+    firstStar.classList.toggle('fa-star');
+    firstStar.classList.toggle('fa-star-o');
+    starRating = 0;
+  }
+}
 //Match function
 function matched() {
+  //toggling the card for the animation and the match
   cardList[0].classList.toggle('open');
   cardList[0].classList.toggle('match');
   cardList[1].classList.toggle('open');
   cardList[1].classList.toggle('match');
+  cardList[0].classList.toggle('animated');
+  cardList[0].classList.toggle('rubberBand');
+  cardList[1].classList.toggle('animated');
+  cardList[1].classList.toggle('rubberBand');
+  //add the match to the variable and empties the lists
   matches ++;
   checkClassCard = [];
   cardList = [];
+}
+//Effect when the cards are matched
+function matchedEffect() {
+  cardList[0].classList.toggle('animated');
+  cardList[0].classList.toggle('rubberBand');
+  cardList[1].classList.toggle('animated');
+  cardList[1].classList.toggle('rubberBand');
 }
 //Unmatched function
 function unmatch() {
@@ -65,26 +109,26 @@ function unmatch() {
   cardList[0].classList.toggle('show');
   cardList[1].classList.toggle('open');
   cardList[1].classList.toggle('show');
+  cardList[0].classList.toggle('unmatch');
+  cardList[1].classList.toggle('unmatch');
+  cardList[0].classList.toggle('animated');
+  cardList[1].classList.toggle('animated');
+  cardList[0].classList.toggle('tada');
+  cardList[1].classList.toggle('tada');
   checkClassCard = [];
   cardList = [];
 }
-//TODO:*list* "open" cards
-function openCards(a) {
-  moves ++;
-  spanMoves.textContent = moves;
-  cardList.push(a);
-  let openedCard = a.firstElementChild.className;
-  checkClassCard.push(openedCard);
-  if(checkClassCard.length > 1) {
-    if(checkClassCard[0] === openedCard){
-        matched();
-    }else{
-    //TODO:negative/red effect adding a class and then removing it on dalay
-        setTimeout(function() {
-          unmatch();
-      }, 600);
-    }
-  }
+//Effect when the cards are not matched
+function unMatchedEffect() {
+  cardList[0].classList.toggle('unmatch');
+  cardList[1].classList.toggle('unmatch');
+  cardList[0].classList.toggle('animated');
+  cardList[0].classList.toggle('tada');
+  cardList[1].classList.toggle('animated');
+  cardList[1].classList.toggle('tada');
+}
+//Add modal when the player wins
+function Won() {
   if(matches === 8){
     swal({
       title: "You're the Best, you're AWESOME!",
@@ -92,14 +136,30 @@ function openCards(a) {
       icon: "success",
       button: "Aww yiss!",
     });
+    startGame();
   }
 }
-//function to flip the cards
-function flip() {
-  let a = this;
-  a.classList.toggle('open');
-  a.classList.toggle('show');
-  openCards(a);
+//TODO:*list* "open" cards
+function openCards(a) {
+  moveStars();
+  cardList.push(a);
+  let openedCard = a.firstElementChild.className;
+  checkClassCard.push(openedCard);
+  if(checkClassCard.length > 1) {
+    if(checkClassCard[0] === openedCard){
+      matchedEffect();
+      setTimeout(function() {
+        matched();
+      }, 500);
+    }else{
+      unMatchedEffect();
+    //TODO:negative/red effect adding a class and then removing it on dalay
+      setTimeout(function() {
+          unmatch();
+      }, 500);
+    }
+  }
+  Won();
 }
 function startGame() {
   //Using shuffle function to Create newDeck
@@ -118,6 +178,12 @@ function startGame() {
   matches = 0;
   moves = 0;
   spanMoves.textContent = moves;
+  firstStar.classList.remove('fa-star-o')
+  firstStar.classList.add('fa-star');
+  secondStar.classList.remove('fa-star-o')
+  secondStar.classList.add('fa-star');
+  thirdStar.classList.remove('fa-star-o')
+  thirdStar.classList.add('fa-star');
 }
 startGame();
 //Add the restart button to reset the game!
